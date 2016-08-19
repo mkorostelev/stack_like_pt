@@ -5,15 +5,9 @@ class Api::UsersController < ApplicationController
   include ActiveModel::Validations
 
   def create
-    build_resource
-
-    resource.save
-
-    if resource.valid? then
-      head :created
-    else
-      head :unprocessable_entity
-    end
+    super
+    
+    head :created
   end
 
   private

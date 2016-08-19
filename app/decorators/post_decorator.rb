@@ -9,7 +9,7 @@ class PostDecorator < Draper::Decorator
           description: description,
           rating: rating,
           author: author.decorate,
-          comments: comments.decorate#.each do |comment| { comment.decorate }
+          comments: comments.decorate
       }
     else
       {

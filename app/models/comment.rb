@@ -6,6 +6,4 @@ class Comment < ActiveRecord::Base
   has_many :likes, as: :likeable
 
   validates :text, presence: true
-
-  validates :rating, numericality: { greater_than_or_equal_to: 0 }
 end
