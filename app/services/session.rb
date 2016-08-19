@@ -4,7 +4,7 @@ class Session
   attr_reader :email, :password, :user
 
   def initialize params
-    params = params.try(:symbolize_keys) || {}
+    params = params&.symbolize_keys || {}
     @user = params[:user]
     @email = params[:email]
     @password = params[:password]
@@ -21,7 +21,7 @@ class Session
   def save!
     raise ActiveModel::StrictValidationFailed unless valid?
 
-    user.token = SecureRandom.uuid
+    user.token ||= SecureRandom.uuid
 
     user.save
   end

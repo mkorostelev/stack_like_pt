@@ -1,7 +1,9 @@
 class Like < ActiveRecord::Base
   enum kind: [:positive, :negative]
 
-  belongs_to :user, dependent: :destroy
+  belongs_to :user
 
   belongs_to :likeable, polymorphic: true
+
+  validates :user_id, uniqueness: { scope: [:likeable_id, :likeable_type] }
 end

@@ -45,3 +45,4 @@ gem 'email_validator'
 gem 'simplecov', :require => false, :group => :test
 
 gem 'rails-observers', github: 'rails/rails-observers'
+gem 'kaminari'

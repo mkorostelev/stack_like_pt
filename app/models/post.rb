@@ -1,14 +1,11 @@
 class Post < ActiveRecord::Base
-  # belongs_to :user, class_name: 'User',
-  #            foreign_key: 'author_id',
-  #            dependent: :destroy
-belongs_to :author, class_name: 'User',
-             # foreign_key: 'author_id',
-             dependent: :destroy
+belongs_to :author, class_name: 'User'
 
-  belongs_to :category, dependent: :destroy
+  belongs_to :category
 
   has_many :likes, as: :likeable
+
+  has_many :comments, dependent: :destroy
 
   validates :title, presence: true
 

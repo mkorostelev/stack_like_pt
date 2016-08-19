@@ -4,19 +4,16 @@ class Api::UsersController < ApplicationController
 
   include ActiveModel::Validations
 
-  def update
-    authorize resource
+  def create
+    build_resource
 
-    super
-  end
+    resource.save
 
-  def save!
-    byebug
-    @user.save
-
-    head :unprocessable_entity unless @user.valid?
-
-    head :created
+    if resource.valid? then
+      head :created
+    else
+      head :unprocessable_entity
+    end
   end
 
   private
@@ -30,6 +27,10 @@ class Api::UsersController < ApplicationController
 
   def resource_params
     params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)
+  end
+
+  def collection
+    @collection ||= User.page(params[:page]).per(5)
   end
 
 end
