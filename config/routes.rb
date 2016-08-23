@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
   namespace :api do
-    resources :users, only: [:create, :destroy, :index, :update]
+    resources :users, only: [:create, :destroy, :index, :update] do
+      get 'me', on: :collection
+      #!!! resource :me, only: :show, on: :collection
+    end
 
     resource :session, only: [:create, :destroy]
-
-    resource :me, only: :show
 
     resources :categories, only: [:index, :show] do
       resources :posts, only: [:index, :create]

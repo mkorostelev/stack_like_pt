@@ -11,30 +11,23 @@ RSpec.describe Api::UsersController, type: :controller do
 
   it { should route(:delete, 'api/users/1').to(action: :destroy, id: 1) }
 
-  # describe '#create.json' do
-  #   before { expect(subject).to receive(:build_resource) }
-  #
-  #   # before do
-  #   #   expect(subject).to receive(:resource) do
-  #   #     double.tap { |a| expect(a).to receive(:save) }
-  #   #   end
-  #   # end
-  #
-  #   before do
-  #     expect(subject).to receive(:resource) do
-  #       double.tap do |a|
-  #         expect(a).to receive(:save) do
-  #           double.tap { |b| expect(b).to receive(:valid?).and_return true}
-  #         end
-  #       end
-  #     end
-  #   end
-  #
-  #   before { post :create, user: { email: 'one@digits.com', password: '12345678', first_name: 'Name', last_name: 'Surname' }, format: :json }
-  #
-  #   it { expect(response).to have_http_status(:created) }
-  # end
+  it { should route(:get, 'api/users/me').to(action: :me) }
 
+  describe '#create.json' do
+    before { expect(subject).to receive(:build_resource) }
+
+    before do
+      expect(subject).to receive(:resource) do
+        double.tap { |a| expect(a).to receive(:save!) }
+      end
+    end
+
+    before { post :create, user: { email: 'one@digits.com', password: '12345678', first_name: 'Name', last_name: 'Surname' }, format: :json }
+
+    it { expect(response).to have_http_status(:created) }
+  end
+
+  # TODO
   # describe '#destroy.json' do
   #   let(:user) { stub_model User }
   #
@@ -62,12 +55,27 @@ RSpec.describe Api::UsersController, type: :controller do
     it { expect { subject.send(:build_resource) }.to_not raise_error }
   end
 
-  # describe '#collection' do
-  #   before { expect(subject).to receive(:params).and_return(:params) }
-  #
-  #   before { expect(User).to receive(:page).with(:params) }
-  #
-  #   it { expect { subject.send :collection }.to_not raise_error }
-  # end
+  describe '#collection' do
+    let(:params) { { page: 5 } }
 
+    before { expect(subject).to receive(:params).and_return(params) }
+
+    before do
+      expect(User).to receive(:page).with(5) do
+        double.tap { |a| expect(a).to receive(:per).with(5) }
+      end
+    end
+
+    it { expect { subject.send :collection }.to_not raise_error }
+  end
+
+  describe '#me' do
+    # TODO
+    # it do
+    #   expect { subject.send :me }.to render_template 'application/show'
+    # end
+    # before { get :me, format: :json }
+    #
+    # it { should render_template 'application/show' }
+  end
 end

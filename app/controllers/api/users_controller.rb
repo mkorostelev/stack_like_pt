@@ -4,6 +4,10 @@ class Api::UsersController < ApplicationController
 
   include ActiveModel::Validations
 
+  def me
+    render template: 'application/show'
+  end
+
   def create
     super
     
@@ -16,7 +20,10 @@ class Api::UsersController < ApplicationController
   end
 
   def resource
-    @user ||= User.find(params&.symbolize_keys[:id]) || current_user
+    return @user if @user
+    @user = User.find(params&.symbolize_keys[:id]) if params&.symbolize_keys[:id]
+    @user = current_user unless @user
+    #!!! @user ||= User.find(params&.symbolize_keys[:id]) || current_user
   end
 
   def resource_params

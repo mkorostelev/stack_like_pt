@@ -1,5 +1,7 @@
 class PostDecorator < Draper::Decorator
   delegate_all
+  decorates_association :author
+  decorates_association :comments
 
   def as_json *args
     if context[:show_comments]
@@ -8,8 +10,8 @@ class PostDecorator < Draper::Decorator
           title: title,
           description: description,
           rating: rating,
-          author: author.decorate,
-          comments: comments.decorate
+          author: author,
+          comments: comments
       }
     else
       {
