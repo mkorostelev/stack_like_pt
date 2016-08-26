@@ -1,4 +1,10 @@
-class Api::PostsController < ApplicationController
+class Admin::PostsController < Admin::BaseController
+  def destroy
+    resource.is_deleted = !resource.is_deleted
+    resource.save!
+
+    head :ok
+  end
 
   private
   def build_resource
@@ -14,7 +20,7 @@ class Api::PostsController < ApplicationController
   end
 
   def collection
-    @collection ||= Post.visible.page(params[:page]).per(5)
+    @collection ||= Post.page(params[:page]).per(5)
   end
 
 end

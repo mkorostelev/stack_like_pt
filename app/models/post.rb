@@ -1,4 +1,4 @@
-class Post < ActiveRecord::Base
+class Post < ApplicationRecord
 belongs_to :author, class_name: 'User'
 
   belongs_to :category
@@ -8,5 +8,7 @@ belongs_to :author, class_name: 'User'
   has_many :comments, dependent: :destroy
 
   validates :title, presence: true
+
+  scope :visible, -> { where(is_deleted: false)  }
 
 end

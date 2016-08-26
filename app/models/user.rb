@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
 
   has_secure_password
 
@@ -17,4 +17,6 @@ class User < ActiveRecord::Base
   has_many :comments
 
   has_many :posts, foreign_key: 'author_id'
+
+  scope :admin, -> { where(is_admin: true)  }
 end

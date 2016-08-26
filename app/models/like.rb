@@ -1,4 +1,4 @@
-class Like < ActiveRecord::Base
+class Like < ApplicationRecord
   enum kind: [:positive, :negative]
 
   belongs_to :user

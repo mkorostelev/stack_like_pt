@@ -5,13 +5,13 @@ RSpec.describe Api::UsersController, type: :controller do
 
   it { should route(:post, 'api/users').to(action: :create) }
 
-  it { should route(:patch, 'api/users/1').to(action: :update, id: 1) }
+  # it { should route(:patch, 'admin/users/1').to(action: :update, id: 1) }
+  #
+  # it { should route(:put, 'admin/users/1').to(action: :update, id: 1) }
+  #
+  # it { should route(:delete, 'api/users/1').to(action: :destroy, id: 1) }
 
-  it { should route(:put, 'api/users/1').to(action: :update, id: 1) }
-
-  it { should route(:delete, 'api/users/1').to(action: :destroy, id: 1) }
-
-  it { should route(:get, 'api/users/me').to(action: :me) }
+  it { should route(:get, 'api/me').to(action: :show) }
 
   describe '#create.json' do
     before { expect(subject).to receive(:build_resource) }
@@ -33,15 +33,18 @@ RSpec.describe Api::UsersController, type: :controller do
   #
   #   before { sign_in user }
   #
-  #   before do
-  #     expect(subject).to receive(:resource) do
-  #       double.tap { |a| expect(a).to receive(:destroy!) }
-  #     end
-  #   end
+  #   before { expect(subject).to receive(:resource).and_return user }
   #
-  #   before { delete :destroy, format: :json }
-  #
-  #   it { expect(response.status).to eq(200) }
+  #   # before do
+  #   #   expect(subject).to receive(:resource) do
+  #   #     double.tap { |a| expect(a).to receive(:destroy!) }
+  #   #   end
+  #   # end
+  #   #
+  #   # before { delete :destroy, user: user, format: :json }
+  #   #
+  #   # it { expect(response.status).to eq(200) }
+  #   it { expect { subject.destroy! }.to_not raise_error }
   # end
 
   describe '#build_resource' do
@@ -69,13 +72,28 @@ RSpec.describe Api::UsersController, type: :controller do
     it { expect { subject.send :collection }.to_not raise_error }
   end
 
-  describe '#me' do
-    # TODO
-    # it do
-    #   expect { subject.send :me }.to render_template 'application/show'
-    # end
-    # before { get :me, format: :json }
-    #
-    # it { should render_template 'application/show' }
+  describe '#resource' do
+    # @user = params[:id] ? User.find(params[:id]) : current_user
+
+    context  do
+      before { expect(subject).to receive(:params).twice.and_return({ id: 1 }) }
+
+      before { expect(User).to receive(:find).with(1) }
+
+      it { expect { subject.send :resource }.to_not raise_error }
+    end
+
+    context  do
+      let(:user) { stub_model User }
+
+      before { sign_in user }
+
+      before { expect(subject).to receive(:params).and_return( {} ) }
+
+      #!!! how to spec that current_user = signed in user
+      # before { expect(subject).to receive(:current_user).and_return(user) }
+
+      it { expect { subject.send :resource }.to_not raise_error }
+    end
   end
 end

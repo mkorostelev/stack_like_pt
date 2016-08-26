@@ -9,7 +9,6 @@ class Api::LikesController < ApplicationController
   private
 
   def parent
-    byebug
     return @parent if @parent
     @parent = Post.find(params[:post_id]) if params[:post_id]
     @parent = Comment.find(params[:comment_id]) if params[:comment_id]

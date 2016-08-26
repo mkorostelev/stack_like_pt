@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
-    resources :users, only: [:create, :destroy, :index, :update] do
-      get 'me', on: :collection
-      #!!! resource :me, only: :show, on: :collection
-    end
+    resources :users, only: [:create, :index, :show]
+    resource :me, controller: 'users', only: [:show, :update]
 
     resource :session, only: [:create, :destroy]
 
@@ -22,6 +20,10 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    resources :users, only: [:create, :index, :show, :update]
 
+    resource :me, controller: 'users', only: [:show, :update]
+
+    resources :posts, only: [:index, :show, :destroy]
   end
 end
