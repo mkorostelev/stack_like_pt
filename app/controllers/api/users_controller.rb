@@ -6,21 +6,24 @@ class Api::UsersController < ApplicationController
 
   def create
     super
-    
+
     head :created
   end
 
   private
+
   def build_resource
     @user = User.new resource_params
   end
 
   def resource
-    @user = params[:id] ? User.find(params[:id]) : current_user
+    @user = params[:id] && params[:action] != 'update' ?
+                            User.find(params[:id]) : current_user
   end
 
   def resource_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:first_name, :last_name, :email, :password,
+                                  :password_confirmation)
   end
 
   def collection

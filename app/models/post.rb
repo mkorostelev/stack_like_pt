@@ -1,5 +1,7 @@
 class Post < ApplicationRecord
-belongs_to :author, class_name: 'User'
+  alias_attribute :user, :author
+
+  belongs_to :author, class_name: 'User'
 
   belongs_to :category
 
@@ -9,6 +11,5 @@ belongs_to :author, class_name: 'User'
 
   validates :title, presence: true
 
-  scope :visible, -> { where(is_deleted: false)  }
-
+  scope :visible, -> { where(is_deleted: false) }
 end

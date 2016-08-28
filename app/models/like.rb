@@ -1,4 +1,7 @@
 class Like < ApplicationRecord
+  LIKE_POSITIVE_RATE = 1
+  LIKE_NEGATIVE_RATE = -1
+
   enum kind: [:positive, :negative]
 
   belongs_to :user
