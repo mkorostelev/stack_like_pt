@@ -25,5 +25,7 @@ Rails.application.routes.draw do
     resource :me, controller: 'users', only: [:show, :update]
 
     resources :posts, only: [:index, :show, :destroy]
+
+    resources :categories, only: [:index, :show, :create, :destroy]
   end
 end

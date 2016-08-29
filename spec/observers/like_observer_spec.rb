@@ -195,21 +195,4 @@ RSpec.describe LikeObserver, type: :observer do
       it { expect { subject.send(:post) }.to_not raise_error }
     end
   end
-
-  #
-  # subject { described_class.send(:new) }
-  #
-  # describe '#before_create' do
-  #   let(:user) { double }
-  #
-  #   let(:relation) { double }
-  #
-  #   before { expect(recovery).to receive(:recoverable).and_return(user) }
-  #
-  #   before { expect(Recovery).to receive(:where).with(recoverable: user).and_return(relation) }
-  #
-  #   before { expect(relation).to receive(:destroy_all) }
-  #
-  #   it { expect{ subject.before_create(recovery) }.to_not raise_error }
-  # end
 end

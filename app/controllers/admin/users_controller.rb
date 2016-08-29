@@ -5,12 +5,8 @@ class Admin::UsersController < Admin::BaseController
 
   private
 
-  def build_resource
-    @user = User.new resource_params
-  end
-
   def resource
-    @user = params[:id] ? User.find(params[:id]) : current_user
+    @user = params[:id] ? User.non_admin.find(params[:id]) : current_user
   end
 
   def resource_params

@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-
   has_secure_password
 
   validates :first_name, presence: true
@@ -18,5 +17,7 @@ class User < ApplicationRecord
 
   has_many :posts, foreign_key: 'author_id'
 
-  scope :admin, -> { where(is_admin: true)  }
+  scope :admin, -> { where(is_admin: true) }
+
+  scope :non_admin, -> { where(is_admin: false) }
 end
