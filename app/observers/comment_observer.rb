@@ -1,6 +1,5 @@
 class CommentObserver < ActiveRecord::Observer
   def after_save(comment)
-    byebug
     comment.post.increment!(:rating, Comment::COMMENT_RATE)
   end
 

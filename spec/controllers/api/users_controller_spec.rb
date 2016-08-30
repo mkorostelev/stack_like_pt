@@ -76,7 +76,7 @@ RSpec.describe Api::UsersController, type: :controller do
     # @user = params[:id] ? User.find(params[:id]) : current_user
 
     context  do
-      before { expect(subject).to receive(:params).twice.and_return({ id: 1 }) }
+      before { expect(subject).to receive(:params).exactly(3).and_return({ id: 1 }) }
 
       before { expect(User).to receive(:find).with(1) }
 

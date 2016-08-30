@@ -8,4 +8,7 @@ class Comment < ApplicationRecord
   has_many :likes, as: :likeable
 
   validates :text, presence: true
+
+  scope :visible, -> { where(is_deleted: false).joins(:user).where(users:
+                                                        { is_banned: false }) }
 end

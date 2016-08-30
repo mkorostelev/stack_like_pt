@@ -1,3 +1,4 @@
+# Post
 class Post < ApplicationRecord
   alias_attribute :user, :author
 
@@ -11,5 +12,6 @@ class Post < ApplicationRecord
 
   validates :title, presence: true
 
-  scope :visible, -> { where(is_deleted: false) }
+  scope :visible, -> { where(is_deleted: false).joins(:author).where(users:
+                                                        { is_banned: false }) }
 end

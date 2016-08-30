@@ -1,24 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe CommentObserver, type: :observer do
-  let(:record) { stub_model Comment }
+  let(:comment) { stub_model Comment }
 
   subject { described_class.send(:new) }
 
   describe '#after_create' do
     # comment.post.increment!(:rating, Comment::COMMENT_RATE)
-
-    let(:comment) { stub_model Comment }
-
-    # before do
-    #   expect(subject).to receive(:comment).and_return(record) do
-    #     double.tap do |a|
-    #       expect(a).to receive(:post) do
-    #         double.tap { |b| expect(b).to receive(:increment!).with(:rating, 1) }
-    #       end
-    #     end
-    #   end
-    # end
 
     before do
       expect(comment).to receive(:post) do
@@ -26,7 +14,19 @@ RSpec.describe CommentObserver, type: :observer do
       end
     end
 
-    it { expect { subject.after_save(record) }.to_not raise_error }
+    it { expect { subject.after_save(comment) }.to_not raise_error }
+  end
+
+  describe '#after_destroy' do
+    # comment.post.decrement!(:rating, Comment::COMMENT_RATE)
+
+    before do
+      expect(comment).to receive(:post) do
+        double.tap { |a| expect(a).to receive(:decrement!).with(:rating, Comment::COMMENT_RATE) }
+      end
+    end
+
+    it { expect { subject.after_destroy(comment) }.to_not raise_error }
   end
 
   #

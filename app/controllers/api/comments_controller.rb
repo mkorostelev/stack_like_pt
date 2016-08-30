@@ -24,7 +24,7 @@ class Api::CommentsController < ApplicationController
   end
 
   def collection
-    @collection ||= Comment.page(params[:page]).per(5)
+    @collection ||= Comment.visible.page(params[:page]).per(5)
   end
 
 end

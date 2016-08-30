@@ -1,4 +1,4 @@
-# change rating of User, Post and Comment for Like after_save and after_destroy
+# change rating of User, Post and Comment by Like after_save and after_destroy
 class LikeObserver < ActiveRecord::Observer
   attr_reader :like, :coef
 
@@ -21,26 +21,14 @@ class LikeObserver < ActiveRecord::Observer
   private
 
   def change_rating
-    change_post_and_author_rating
+    change_object_and_author_rating post
 
-    change_comment_and_author_rating if like.likeable.is_a?(Comment)
+    change_object_and_author_rating comment if like.likeable.is_a?(Comment)
   end
 
-  #!!! def change_object_and_author_rating(object)
-  #   object.increment!(:rating, rating_value)
-  #   object.user.increment!(:rating, rating_value)
-  # end
-
-  def change_post_and_author_rating
-    post.increment!(:rating, rating_value)
-
-    post.user.increment!(:rating, rating_value)
-  end
-
-  def change_comment_and_author_rating
-    comment.increment!(:rating, rating_value)
-
-    comment.user.increment!(:rating, rating_value)
+  def change_object_and_author_rating(object)
+    object.increment!(:rating, rating_value)
+    object.user.increment!(:rating, rating_value)
   end
 
   def rating_value

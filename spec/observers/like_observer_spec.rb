@@ -21,7 +21,12 @@ RSpec.describe LikeObserver, type: :observer do
     # change_post_and_author_rating coef
     # change_comment_and_author_rating coef if like.likeable.is_a?(Comment)
 
-    before { expect(subject).to receive(:change_post_and_author_rating) }
+    let(:post) { stub_model Post }
+
+    before { expect(subject).to receive(:post).and_return(post) }
+
+    before { expect(subject).to receive(:change_object_and_author_rating).
+                                                                  with(post) }
 
     context 'post' do
       before do
@@ -49,7 +54,12 @@ RSpec.describe LikeObserver, type: :observer do
         end
       end
 
-      before { expect(subject).to receive(:change_comment_and_author_rating) }
+      let(:comment) { stub_model Comment }
+
+      before { expect(subject).to receive(:comment).and_return(comment) }
+
+      before { expect(subject).to receive(:change_object_and_author_rating).
+                                                                with(comment) }
 
       it { expect { subject.send(:change_rating) }.to_not raise_error }
     end
@@ -84,54 +94,24 @@ RSpec.describe LikeObserver, type: :observer do
     end
   end
 
-  describe '#change_post_and_author_rating' do
-    # post.increment!(:rating, rating_value)
-    # post.user.increment!(:rating, rating_value)
+  describe '#change_object_and_author_rating' do
+    # object.increment!(:rating, rating_value)
+    # object.user.increment!(:rating, rating_value)
+
+    let(:object) { stub_model Post }
 
     before { expect(subject).to receive(:rating_value).twice.and_return 1 }
 
+    before { expect(object).to receive(:increment!).with(:rating, 1) }
+
     before do
-      expect(subject).to receive(:post) do
+      expect(object).to receive(:user) do
         double.tap { |a| expect(a).to receive(:increment!).with(:rating, 1) }
       end
     end
 
-    before do
-      expect(subject).to receive(:post) do
-        double.tap do |a|
-          expect(a).to receive(:user) do
-            double.tap { |b| expect(b).to receive(:increment!).with(:rating, 1) }
-          end
-        end
-      end
-    end
-
-    it { expect { subject.send(:change_post_and_author_rating) }.to_not raise_error }
-  end
-
-  describe '#change_comment_and_author_rating' do
-    # comment.increment!(:rating, rating_value)
-    # comment.user.increment!(:rating, rating_value)
-
-    before { expect(subject).to receive(:rating_value).twice.and_return 1 }
-
-    before do
-      expect(subject).to receive(:comment) do
-        double.tap { |a| expect(a).to receive(:increment!).with(:rating, 1) }
-      end
-    end
-
-    before do
-      expect(subject).to receive(:comment) do
-        double.tap do |a|
-          expect(a).to receive(:user) do
-            double.tap { |b| expect(b).to receive(:increment!).with(:rating, 1) }
-          end
-        end
-      end
-    end
-
-    it { expect { subject.send(:change_comment_and_author_rating) }.to_not raise_error }
+    it { expect { subject.send(:change_object_and_author_rating, object) }.
+                                                            to_not raise_error }
   end
 
   describe '#comment' do
