@@ -1,5 +1,4 @@
 class Api::LikesController < ApplicationController
-
   def create
     super
 

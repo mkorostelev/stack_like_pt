@@ -6,12 +6,12 @@ class Admin::UsersController < Admin::BaseController
   private
 
   def resource
-    @user = params[:id] ? User.non_admin.find(params[:id]) : current_user
+    @user ||= params[:id] ? User.non_admin.find(params[:id]) : current_user
   end
 
   def resource_params
     params.require(:user).permit(:first_name, :last_name, :email, :password,
-                                  :password_confirmation, :is_admin)
+                                  :password_confirmation, :is_admin, :is_banned)
   end
 
   def collection

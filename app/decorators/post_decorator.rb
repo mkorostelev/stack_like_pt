@@ -19,9 +19,8 @@ class PostDecorator < Draper::Decorator
           title: title,
           description: description,
           rating: rating,
-          author: author.decorate
+          author: author
       }
     end
-
   end
 end

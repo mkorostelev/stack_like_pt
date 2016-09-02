@@ -22,7 +22,9 @@ RSpec.describe Api::UsersController, type: :controller do
       end
     end
 
-    before { post :create, user: { email: 'one@digits.com', password: '12345678', first_name: 'Name', last_name: 'Surname' }, format: :json }
+    before { post :create, user: { email: 'one@digits.com',
+            password: '12345678', first_name: 'Name', last_name: 'Surname' },
+            format: :json }
 
     it { expect(response).to have_http_status(:created) }
   end
@@ -75,20 +77,21 @@ RSpec.describe Api::UsersController, type: :controller do
   describe '#resource' do
     # @user = params[:id] ? User.find(params[:id]) : current_user
 
-    context  do
-      before { expect(subject).to receive(:params).exactly(3).and_return({ id: 1 }) }
+    context do
+      before { expect(subject).to receive(:params).exactly(3)
+                                                  .and_return({ id: 1 }) }
 
       before { expect(User).to receive(:find).with(1) }
 
       it { expect { subject.send :resource }.to_not raise_error }
     end
 
-    context  do
+    context do
       let(:user) { stub_model User }
 
       before { sign_in user }
 
-      before { expect(subject).to receive(:params).and_return( {} ) }
+      before { expect(subject).to receive(:params).and_return({}) }
 
       #!!! how to spec that current_user = signed in user
       # before { expect(subject).to receive(:current_user).and_return(user) }

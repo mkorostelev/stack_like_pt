@@ -48,5 +48,4 @@ class ApplicationController < ActionController::Base
       @current_user = User.find_by(token: token)
     end
   end
-
 end

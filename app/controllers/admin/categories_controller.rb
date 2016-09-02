@@ -1,5 +1,4 @@
 class Admin::CategoriesController < Admin::BaseController
-
   private
 
   def build_resource

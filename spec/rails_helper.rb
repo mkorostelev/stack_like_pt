@@ -57,6 +57,7 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   config.include Authorization
+  config.include Permitter
 end
 
 Shoulda::Matchers.configure do |config|

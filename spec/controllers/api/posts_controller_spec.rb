@@ -13,15 +13,44 @@ RSpec.describe Api::PostsController, type: :controller do
 
   it { expect(post: 'api/posts/1/comments').to be_routable }
 
-  describe '#build_resource' do
-    # @post = Post.new resource_params
-    let(:params) { { foo: :bar } }
+  describe '#create.json' do
+    # def create
+    #   build_resource
 
-    before { expect(subject).to receive(:resource_params).and_return params }
+    #   resource.save!
+    # end
 
-    before { expect(Post).to receive(:new).with(params) }
+    # private
+    # def build_resource
+    #   @post = Post.new resource_params
+    # end
 
-    it { expect { subject.send(:build_resource) }.to_not raise_error }
+    # def resource
+    #   @post ||= Post.find(params&.symbolize_keys[:id])
+    # end
+
+    # def resource_params
+    #   params.require(:post).permit(:title, :description).merge(author: current_user, category_id: params[:category_id])
+    # end
+
+    let(:user) { stub_model User }
+
+    before { sign_in user }
+
+    let(:object) { stub_model Post }
+
+    let(:params) { { category_id: '1', post:
+                  { title: 'title', description: 'description' } } }
+
+    before { expect(Post).to receive(:new)
+      .with(permit!(title: 'title', description: 'description', author: user,
+                    category_id: '1')).and_return(object) }
+
+    before { expect(object).to receive(:save!) }
+
+    before { post :create, params: params, format: :json }
+
+    it { expect(response).to have_http_status(:ok) }
   end
 
   describe '#collection' do
@@ -44,13 +73,24 @@ RSpec.describe Api::PostsController, type: :controller do
     it { expect { subject.send :collection }.to_not raise_error }
   end
 
-  describe '#resource' do
-    # @post ||= Post.find(params&.symbolize_keys[:id])
+  # describe '#build_resource' do
+  #   # @post = Post.new resource_params
+  #   let(:params) { { foo: :bar } }
 
-    before { expect(subject).to receive(:params).and_return({ id: 1 }) }
+  #   before { expect(subject).to receive(:resource_params).and_return params }
 
-    before { expect(Post).to receive(:find).with(1) }
+  #   before { expect(Post).to receive(:new).with(params) }
 
-    it { expect { subject.send :resource }.to_not raise_error }
-  end
+  #   it { expect { subject.send(:build_resource) }.to_not raise_error }
+  # end
+
+  # describe '#resource' do
+  #   # @post ||= Post.find(params&.symbolize_keys[:id])
+
+  #   before { expect(subject).to receive(:params).and_return({ id: 1 }) }
+
+  #   before { expect(Post).to receive(:find).with(1) }
+
+  #   it { expect { subject.send :resource }.to_not raise_error }
+  # end
 end
